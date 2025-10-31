@@ -63,6 +63,10 @@ export class ImageService {
   }
 
   getImagePath(): string | null {
-    return fs.existsSync(this.imagePath) ? this.imagePath : null;
+    const absolutePath = path.resolve(this.imagePath);
+    console.log('Image path:', this.imagePath);
+    console.log('Absolute path:', absolutePath);
+    console.log('File exists:', fs.existsSync(absolutePath));
+    return fs.existsSync(absolutePath) ? absolutePath : null;
   }
 }

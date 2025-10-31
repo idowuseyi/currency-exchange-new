@@ -86,8 +86,6 @@ export class CountryService {
         exchangeRate = exchangeRates[currencyCode];
         const multiplier = randomInRange(1000, 2000);
         estimatedGdp = (country.population * multiplier) / exchangeRate;
-      } else if (!currencyCode) {
-        estimatedGdp = 0;
       } else {
         estimatedGdp = null;
       }
@@ -137,13 +135,13 @@ export class CountryService {
     const qb = this.countryRepo.createQueryBuilder('country');
 
     if (region) {
-      qb.andWhere('country.region = :region', { region });
+      qb.andWhere('LOWER(country.region) = LOWER(:region)', { region });
     }
     if (currency) {
-      qb.andWhere('country.currency_code = :currency', { currency });
+      qb.andWhere('UPPER(country.currency_code) = UPPER(:currency)', { currency });
     }
     if (sort === 'gdp_desc') {
-      qb.orderBy('country.estimated_gdp', 'DESC', 'NULLS LAST');
+      qb.orderBy('country.estimated_gdp', 'DESC');
     }
 
     return qb.getMany();

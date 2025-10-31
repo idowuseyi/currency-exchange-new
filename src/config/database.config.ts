@@ -23,11 +23,7 @@ export const databaseConfig = (): TypeOrmModuleOptions => {
     username: url.username,
     password: url.password,
     database: url.pathname.slice(1), // Remove leading slash
-    ssl:
-      process.env.NODE_ENV === 'production' ||
-      dbUrl.includes('aivencloud')
-        ? { rejectUnauthorized: true }
-        : false,
+    ssl: false,
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     synchronize: true, // Enable for development
     logging: false,

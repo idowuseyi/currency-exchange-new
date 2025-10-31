@@ -6,6 +6,7 @@ import {
   Delete,
   Query,
   HttpCode,
+  BadRequestException,
 } from '@nestjs/common';
 import { CountryService } from './country.service';
 import { Country } from './country.entity';
@@ -24,9 +25,12 @@ export class CountryController {
   async getAll(
     @Query('region') region?: string,
     @Query('currency') currency?: string,
-    @Query('sort') sort?: 'gdp_desc',
+    @Query('sort') sort?: string,
   ): Promise<Country[]> {
-    return this.countryService.getAll(region, currency, sort);
+    if (sort && sort !== 'gdp_desc') {
+      throw new BadRequestException({ error: 'Invalid sort parameter. Only gdp_desc is supported.' });
+    }
+    return this.countryService.getAll(region, currency, sort as 'gdp_desc');
   }
 
   @Get(':name')
